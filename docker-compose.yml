@@ -1,0 +1,8 @@
+services:
+  zeek-slim:
+    image: minimal-zeek:1.1
+    container_name: zeek-minimal
+    network_mode: "host"
+    volumes: 
+      - /opt/zeek/logs:/opt/zeek/logs
+
