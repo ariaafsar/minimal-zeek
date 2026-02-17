@@ -3,6 +3,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 interface = os.getenv("INTERFACE")
+zeek_script = os.getenv("ZEEK_SCRIPT")
+log_interval = os.getenv("LOG_INTERVAL")
+log_expire = os.getenv("LOG_EXPIRE")
+
+
 import os
 
 def update_config(file_path, key, value):
@@ -155,10 +160,10 @@ comment_line_in_file("@load base/protocols/xmpp", "/opt/zeek/share/zeek/base/ini
 comment_line_in_file("@load base/files/x509", "/opt/zeek/share/zeek/base/init-default.zeek")
 #reconfiguring local.zeek
 clear_file("/opt/zeek/share/zeek/site/local.zeek")
-add_line("/opt/zeek/share/zeek/site/local.zeek", "@load ongoing_conns")
+add_line("/opt/zeek/share/zeek/site/local.zeek", f"@load {str(zeek_script)}")
 add_line("/opt/zeek/share/zeek/site/local.zeek", "@load policy/tuning/json-logs.zeek")
 #change zeekctl.cfg
-update_config("/opt/zeek/etc/zeekctl.cfg", "LogRotationInterval", "7200")
-update_config("/opt/zeek/etc/zeekctl.cfg", "LogExpireInterval", "0")
+update_config("/opt/zeek/etc/zeekctl.cfg", "LogRotationInterval", str(log_interval))
+update_config("/opt/zeek/etc/zeekctl.cfg", "LogExpireInterval", str(log_expire))
 #chhange zeek's interface
 update_config("/opt/zeek/etc/node.cfg", "interface", str(interface))
